@@ -5,6 +5,7 @@ import (
 	"go-clean-architecture/config"
 	"go-clean-architecture/internal/infra/database"
 	"go-clean-architecture/internal/repository/mysql"
+	"go-clean-architecture/internal/router"
 	"go-clean-architecture/internal/usecase"
 
 	"log"
@@ -22,5 +23,13 @@ func main() {
 
 	authorRepo := mysql.NewAuthorRepository(db)
 	articleRepo := mysql.NewArticleRepository(db)
-	authorUsecase := usecase.NewAuthorUsecase(authorRepo, articleRepo)
+
+	ucs := &router.UsecaseContainer{
+		AuthorUsecase: usecase.NewAuthorUsecase(authorRepo, articleRepo),
+	}
+
+	r := router.New(ucs)
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }
