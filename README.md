@@ -74,3 +74,8 @@ curl -s -H 'Authorization: secret' http://localhost:8080/v1/author/1
 ## Contributing
 
 - 이슈/PR 환영합니다.
+
+## License
+
+- MIT (see `LICENSE`)
+- Third-party licenses (see `licenses/`)
