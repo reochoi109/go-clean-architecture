@@ -1,6 +1,8 @@
 package config
 
-import "time"
+import (
+	"time"
+)
 
 type ServerConfig struct {
 	Env         string // "prod", "staging", "dev"
@@ -13,6 +15,7 @@ type DatabaseConfig struct {
 	User         string
 	Password     string
 	Name         string
+	Type         string // "mysql" , "postgresql"
 	Port         int
 	MaxOpenConns int
 	MaxIdleConns int
