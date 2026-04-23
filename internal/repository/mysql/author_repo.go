@@ -19,7 +19,7 @@ func NewAuthorRepository(db *sql.DB) *AuthorRepository {
 }
 
 func (r *AuthorRepository) GetByID(ctx context.Context, id string) (domain.Author, error) {
-	query := `SELECT id, name, created_at, updated_at FROM author WHERE id=?`
+	query := `SELECT id, email, name, created_at, updated_at FROM author WHERE id=?`
 
 	stmt, err := r.db.PrepareContext(ctx, query)
 	if err != nil {

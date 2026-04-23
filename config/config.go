@@ -26,6 +26,7 @@ func Load() *Config {
 			User:         MustEnvString("DB_USER"),
 			Name:         MustEnvString("DB_NAME"),
 			Password:     MustEnvString("DB_PASSWORD"),
+			Type:         EnvString("DB_TYPE", "mysql"),
 			Port:         MustEnvInt("DB_PORT"),
 			MaxOpenConns: EnvInt("DB_MAX_OPEN_CONNS", 10),
 			MaxIdleConns: EnvInt("DB_MAX_IDLE_CONNS", 5),
@@ -35,7 +36,7 @@ func Load() *Config {
 
 func (c *Config) String() string {
 	return fmt.Sprintf("Config{Server: [Port: %d], DB: [Host: %s, User: %s, Name: %s, Pass: ****]}",
-		c.Database.Port,
+		c.Server.Port,
 		maskString(c.Database.Host),
 		maskString(c.Database.User),
 		c.Database.Name,

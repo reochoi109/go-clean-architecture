@@ -3,22 +3,23 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"go-clean-architecture/config"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func New(dbCfg config.DatabaseConfig) (*sql.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=1&loc=Asia/Seoul",
-		dbCfg.User, dbCfg.Password, dbCfg.Host, dbCfg.Port, dbCfg.Name)
+type Options struct {
+	MaxOpenConns int
+	MaxIdleConns int
+}
 
-	db, err := open(dbCfg.Type, dsn)
+func New(driver, dsn string, opts Options) (*sql.DB, error) {
+	db, err := open(driver, dsn)
 	if err != nil {
 		return nil, err
 	}
-	db.SetMaxOpenConns(dbCfg.MaxOpenConns)
-	db.SetMaxIdleConns(dbCfg.MaxIdleConns)
+	db.SetMaxOpenConns(opts.MaxOpenConns)
+	db.SetMaxIdleConns(opts.MaxIdleConns)
 	return db, nil
 }
 

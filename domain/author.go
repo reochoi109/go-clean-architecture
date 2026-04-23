@@ -1,9 +1,11 @@
 package domain
 
+import "time"
+
 type Author struct {
 	ID        string
 	Email     string
 	Name      string
-	CreatedAt string
-	UpdatedAt string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

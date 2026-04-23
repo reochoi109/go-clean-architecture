@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const TEMP_TOKEN = "secret"
+
 type UsecaseContainer struct {
 	AuthorUsecase domain.AuthorUsecase
 }
@@ -26,7 +28,7 @@ func New(uc *UsecaseContainer) *gin.Engine {
 	})
 
 	authorGroup := v1.Group("/author")
-	authorGroup.Use(middleware.AuthMiddleware())
+	authorGroup.Use(middleware.AuthMiddleware(TEMP_TOKEN))
 	{
 		api.NewAuthorHandler(authorGroup, uc.AuthorUsecase)
 	}

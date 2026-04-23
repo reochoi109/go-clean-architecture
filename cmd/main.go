@@ -12,24 +12,38 @@ import (
 )
 
 func main() {
+	// config
 	cfg := config.Load()
-	fmt.Printf("Loaded Config: %s\n", cfg)
 
-	db, err := database.New(cfg.Database)
+	// database
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Asia%%2FSeoul",
+		cfg.Database.User,
+		cfg.Database.Password,
+		cfg.Database.Host,
+		cfg.Database.Port,
+		cfg.Database.Name,
+	)
+	db, err := database.New(cfg.Database.Type, dsn, database.Options{
+		MaxOpenConns: cfg.Database.MaxOpenConns,
+		MaxIdleConns: cfg.Database.MaxIdleConns,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
+	// repository
 	authorRepo := mysql.NewAuthorRepository(db)
 	articleRepo := mysql.NewArticleRepository(db)
 
+	// usecase
 	ucs := &router.UsecaseContainer{
 		AuthorUsecase: usecase.NewAuthorUsecase(authorRepo, articleRepo),
 	}
 
+	// router
 	r := router.New(ucs)
-	if err := r.Run(":8080"); err != nil {
+	if err := r.Run(fmt.Sprintf(":%d", cfg.Server.Port)); err != nil {
 		log.Fatal(err)
 	}
 }
